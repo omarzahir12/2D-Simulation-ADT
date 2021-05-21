@@ -1,0 +1,8 @@
+[flake8]
+disable-noqa = True
+exclude = partner/
+ignore = E266,F403,F405,N802,N803
+max-complexity = 6
+max-line-length = 94
+show-source = True
+statistics = True

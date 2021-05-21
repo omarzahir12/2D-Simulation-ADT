@@ -1,0 +1,178 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+\title{Assignment 2 Solution}
+\author{Mohammad Omar Zahir - zahirm1}
+\date{\today}
+
+\begin {document}
+
+\maketitle
+
+This report discusses the testing phase for Shape.py, CircleT.py, TriangleT.py, BodyT.py, Scene.py, and Plot.py. It also discusses the results
+of running the same tests on the partner files. The assignment specifications
+are then critiqued and the requested discussion questions are answered.
+
+\section{Testing of the Original Program}
+The testing for the modules in this assignment was done quite similarly to the first one, where many test cases were carefully chosen to account for both regular and average cases, as well as more specific boundary and edge cases. For the regular cases, common values in an appropriate range from both positive and negative values were given, as would be the case in most scenarios.
+\\\\
+To test the rigour of the modules, it was important to cover as many boundary and edge cases as possible, to ensure that the modules behaved reasonably well under extreme circumstances. One of these such tests were done on the exception cases, to ensure that the state invariants were properly being checked for. For this reason, most of the modules contained at least two exception tests, one for every condition of the invariant, as well as testing for them together as well. Furthermore, the types of values given to the functions were not only regular, but also given at very large and small values, both negative and positive, in the hopes of testing any irregular behavior in those cases.
+\\\\
+In terms of other testing decisions, many functions like getters and setters, were tested below, with the rationale provided below. Similarly, many usual and general use test cases were tested, like those for objects falling under the effect of gravity (freefall), as well as very familiar projectile and ballistic motions. The advantages from testing these scenarios were that the results that were produced were quite easily verifiable, as the motion of such objects have a very distinguished result. This philosophy was especially taken into consideration when testing the $Plot$ module manually, which allowed us to identify the correct results of the testing almost immediately.
+\\\\
+Certain testing techniques that I had not yet used before were also introduced for the test cases, the most notable strategy of which was the method to test the results of the $Scene$ module. Due to the complicated nature of the $Scene$ and it's outputs, a testing technique was derived where, through the use of for loops, all the expected outputs were efficiently tested, and the method could be repeated for other results of $Scene$ quite easily.
+
+\section{Results of Testing Partner's Code}
+After importing the partner files, and using my own implementations for $Shape.py$ and $Plot.py$, I found that all 40 of the automated tests created in my $test_driver.py$ had all passed. Similarly, all the manual tests that I had created for $Plot.py$ were also shown to be identical to my results. Upon closer inspection into my partner's code, apart from a few differences in design decisions, our code was nearly identical in implementation, which is why they also produced identical results.
+\\\\
+Comparing the same partner testing from the first assignment, I found there to be a drastic difference in both the code implementations and results. In the previous assignment, my partner's code and my own were quite different, despite having the identical, albeit informal, specification sheet, which is likely what contributed to the difference. In this assignment, however, it was found that nearly all of our implementations were identical, from the input specifications to the output formatting, which is a direct consequence of the mathematically rigid specifications that were provided. Furthermore, the results of testing my partner code in the previous assignments resulted in many failed test cases, mainly due to misinterpretations that I had assumed that my partner had made when designing his module, while this time, all of the test cases passed. Overall, taking away from the comparison of this exercise from both assignments I found that a more mathematically rigid specification is absolutely necessary for producing reliable and consistent code.
+
+
+\section{Critique of Given Design Specification}
+The design specification given in this assignment was starkly different to the one given in the first assignment. The major difference, as discussed above, was the mathematically rigid module specifications that were given, which left no room for ambiguity. Thanks to their rigidness, and apart from a few design difference, my code and my partners code performed identical, having passed all the tests-cases and producing the same graphs. Some aspects of the specifications that I appreciated included the consistency of the specification, which made implementing the code quite efficient and intuitive. Some minor examples that were appreciated include the uniform pattern in terms of variable inputs, the ordering of certain variable declarations inside methods, the order by which exception handling was implemented, as well as certain consistent naming conventions. Although these properties have minimal impact on the module itself, it can make a difference for overall cleanliness and even incorporates for designing for change as things will be easier to follow if looked at again. It is also worth noting that the specifications supported high cohesion within the modules, meaning that modules had methods that had related functions and were performing tasks that were focused on a central purpose. Each shape module, for example, had methods that specifically pertained to the correct functioning and outcome of the final product for the module, and were all working closely together to achieve that result, like how Scene had the sim function, as well as getters and setters for the force and velocity.
+\\\\
+Through an essentiality perspective, most of the methods were purposeful and in use by performing essential functions, either by performing calculations, or getting and setting state variables. That being said, certain methods, the local functions in particular, could be deemed unessential as their computations can be done inside other major methods. One example in particular is the sum function, which does not need a separate method and can be done in python natively.\\ Furthermore, I also believe that the modules had high coupling, whereas low coupling is usually preferred, with the fact that $Shape.py$ was being used by nearly all the methods. Although this is discussed further in part j of question 7, I believe that this implementation can be justified in our case since $Shape$ was quite an important interface, and all the resulting shape modules used it as a template.
+\\
+While the specification had some aspects of minimality, as most methods were following a single objective, it cannot be defined as minimal overall. This is due to the fact that certain setters were changing more than one state variable, like the setters for forces in $Scene.py$, which violates the principle of minimality. This decision can be justified, however, because if we were to create separate mutators, this could lead to increased amount of code use, when the current implementation compactly and effectively can get the same implementation done. \\
+It is also worth noting that the specifications did not incorporate opacity, mainly due to the fact that the implementation was done in Python. Python does not explicitly support the functionality for private methods in the same way that languages like Java do, meaning that we can not enforce information hiding, and thus, opacity. A simple solution for maintaining opacity could be to implement the modules in a language like Java where these functionalities are supported. \\
+Moreover, when looking for generality in the specification we can see that some modules are not as general as they can be. One such example is $TriangleT$ which generates a equilateral triangle object for simulation, as it takes only one side length and projects it for all sides. While this does serve our purpose, it would appeal to a larger variety of use cases if the functionality for scalene and isosceles triangles were added as well, widening our application scope. This could be done seamlessly by having a single side length as the default input, but if only two more are provided, a custom triangle object can be made. While this may change some of our implementation, as the exceptions and calculations may be altered, the resulting module could appeal to a larger use case.
+\\\\
+Apart from the principles discussed above, while I greatly appreciate the mathematical rigidness of the specifications, due to its functional nature some implementations were hard to grasp initially. In particular, I found some trouble with the $sim$ method from $Scene.py$, where it was not immediately clear what some of the variables like $odeint$ and $ode$ represented, or how they behaved. While these mathematical notations are essential, as they leave no room for ambiguity, I believe that an improvement that could be made is to complement these notations with a brief example in plain English, which could help explain some of the more complicated aspects of the model.
+\section{Answers}
+
+\begin{enumerate}[a)]
+
+\item By definition, getters and setters serve the simple purpose to protect your data, meaning your state variables can only be accessed or altered through them. For that reason, it might not immediately make sense for someone to run test cases for them as they usually contain a single line of code for a return statement. In most, cases there is no need as getters and setters are quite simple and if there are restrictions on deadlines or there is confidence that they were implemented properly than it would not be required to test them.  However, I believe it may be important to test these methods for a few reasons, one such being consistency. Because nearly every other aspect of the code implementation is being checked for correctness, most of them being more difficult tests to do in general, it would not make sense for something like setters and getters to be glossed over. This brings me to my second point where I argue that there are important situations where it may be necessary to test a setter and getter. The existence of setter and getter methods imply that other integral methods in the module are using them to change the state variables. This would mean that if the methods do not work as intended, this would essentially destroy the productivity of the entire module.
+\item In my test cases, I went through the liberty of testing my setters and getters for the Fx and Fy functions, mainly for the reasons stated in part a). Two separate functions were specifically made for the testing of the setters and getters. For testing the getters, the output of the get function was compared directly to the known functions that were having the getter called on them, with a pass assuring that the getter was working as intended. To test the setter, we would have to leverage the functionality of the getter, which we have confirmed to be working correctly. This was done by first using the setter to set the function used by an object to another distinct function specifically, and then use the getter and compare the changed version directly with the one that it is expected to have. These testing implementations as described can be seen in the code for further clarification.
+\item If automated tests were required to be done on Plot.py, matplotlib allows for the saving of generated graphs as image files using the $.savefig$ method. With this, we can generate the expected graphs separately using matplotlib, and then compare these two images with a pixel-by-pixel difference by converting the images into a sequence of pixel arrays, which can be done using $imread$ which can be found in the $scipy$ module.
+\item
+
+\noindent close\textunderscore enough($x_\text{calc}$, $x_\text{true}$):
+\begin{itemize}
+\item output: $out :=
+\dfrac{\text{norm}(\text{difference}(x_\text{calc}, x_\text{true}))}{\text{norm}(x_\text{true})}$ $<$ $\epsilon$
+
+\item exception: Not mentioned
+\end{itemize}
+
+Local Functions
+
+$\text{difference}: \text{seq of } \mathbb{R} \times \text{seq of } \mathbb{R} \rightarrow \text{seq of } \mathbb{R}$\\
+$\text{difference} (a,b) \equiv [x : \mathbb{N} \bigm| x \in [0..|a_\text{s}| - 1] : a_\text{x} - b_\text{x}]$\\
+$\text{norm}: \text{seq of } \mathbb{R}
+\rightarrow \mathbb{R}$\\
+$\text{norm}(a) \equiv \exists  x \in a \bigm| \forall  y \in a  \bigm| |x| \ge |y| : x$
+
+For further clarification, the norm function looks for the largest element in the list, and returns that as a single output.
+
+\item In the given specification, we have restrictions for the mass and shape dimensions simply because we are modelling reality, and it is simply impossible for objects that are modelled using shapes to have negative mass or dimensions. The position coordinates of x and y, however, are things that should have the possibility of both positive and negative values. One such reason for negative values is for positions with a certain perspective. For example, if you are modelling the position of an object above sea level, the advantages of having a negative y-coordinate would be to represent the height below sea-level, with the positive representing the height above. Similarly, negative positions allow you to simulate the movement of an object on the entire 2D plane with no restrictions, allowing you to see the full extent of how much an object has moved relative to it's original position when placed at the origin. As such, it would be counter-intuitive to limit our scope of the 2D-plane for our applications by checking for negative position coordinates.
+\item We can informally prove that the invariant for TriangleT will always be satisfied because of the exception check during the initialization, where $s$ and $m$ are both checked to be greater than 0, and a $ValueError$ is thrown otherwise. Furthermore, because we know that there are no other mutators in the module, meaning that the values for $s$ and $m$ cannot be changed after initialization, we can confirm that if the object passes the initialization, there is no way for the invariant to not hold given our current implementation.
+\item
+    \begin{verbatim}
+        [x**(1/2) for x in range(5,20) if x%2 != 0]
+    \end{verbatim}
+\item
+    \begin{verbatim}
+        def no_upper(s):
+            l = []
+            for c in s:
+                if not c.isupper():
+                    l += [c]
+            return ''.join(l)
+    \end{verbatim}
+\item Abstraction is the software engineering principle that pertains to distancing yourself from unimportant details that complicate the problem, and instead 'abstracting' them away and getting a simpler foundation for the solution. Generality is the principle that deals with solving a more 'general' version of an existing problem rather than a very specific or detailed one. Although they are separate principles, it is clear that these principles can overlap in more than a few cases, as often generality is a by-product of abstraction. Abstraction can often lead to a more general version of the problem as we are removing details that can be overlooked for the simpler implementation. For example, if there is a complex problem at hand and abstraction is suggested to make the problem easier, it can often be the case that the problem you are looking at may have many specific state variables and scenarios, and solving a more general case of the problem could give you the initial foundation to solve the harder solution. In that situation, you would be abstracting away the unimportant details of the extremely specific situation by solving a general version of the problem, making generality an application of abstraction.
+\item Generally, in software engineering, coupling refers to how dependent individual modules are to one another, where low coupling refers to increased independence, and high coupling implies more dependence. As we have learnt, it is ideal for a good implementation to have low coupling, as this means that if a module does have to be changed, we do not need to worry about the impacts on other modules since they are designed to be independent. In this scenario, if we are forced to have high coupling, I believe that it is better for many modules to be dependant on a single module rather than a single module being dependant on many others. As testing for the other modules happens, the one module that is depended on will continuously be modified and rigorously tested. On the other hand, if we were to allow a single module to use many others, in the case that there are bugs in the dependant module, it may take time to determine the exact module, from the many that it is depending on, to find the issue. To see an example of the better approach, we can look at our specifications of this assignment. In the assignment we have one module $Shape.py$, which is being depended on by most of the other modules, and the benefits of this can clearly be seen throughout the assignment. If it were the opposite, it would result in a lot of backtracking between the depended and dependant modules. The Fan-in approach also has the added benefit of code reuse, as can be seen from the assignment, that all the modules using $Shape.py$ use the abstract methods that are set by it. The Fan-out implementation also has the added drawback of being fragile because of the `all-or-nothing' characteristic - nearly all the other modules must be implemented fully before we can work on our single module. It is also worth noting from the example in our assignment that if the 'Fan-in' approach is being used, it is advisable that the central module should be kept as simple and minimal as possible, as we can see in the example of $Shape.py$ being a template class.
+\end{enumerate}
+
+\newpage
+
+\lstset{language=Python, basicstyle=\tiny, breaklines=true, showspaces=false,
+  showstringspaces=false, breakatwhitespace=true}
+%\lstset{language=C,linewidth=.94\textwidth,xleftmargin=1.1cm}
+
+\def\thesection{\Alph{section}}
+
+\section{Code for Shape.py}
+
+\noindent \lstinputlisting{../src/Shape.py}
+
+\newpage
+
+\section{Code for CircleT.py}
+
+\noindent \lstinputlisting{../src/CircleT.py}
+
+\newpage
+
+\section{Code for TriangleT.py}
+
+\noindent \lstinputlisting{../src/TriangleT.py}
+
+\newpage
+
+\section{Code for BodyT.py}
+
+\noindent \lstinputlisting{../src/BodyT.py}
+
+\newpage
+
+\section{Code for Scene.py}
+
+\noindent \lstinputlisting{../src/Scene.py}
+
+\newpage
+
+\section{Code for Plot.py}
+
+\noindent \lstinputlisting{../src/Plot.py}
+
+\newpage
+
+\section{Code for test\_driver.py}
+
+\noindent \lstinputlisting{../src/test_driver.py}
+
+\newpage
+
+\section{Code for Partner's CircleT.py}
+
+\noindent \lstinputlisting{../partner/CircleT.py}
+
+\newpage
+
+\section{Code for Partner's TriangleT.py}
+
+\noindent \lstinputlisting{../partner/TriangleT.py}
+
+\newpage
+
+\section{Code for Partner's BodyT.py}
+
+\noindent \lstinputlisting{../partner/BodyT.py}
+
+\newpage
+
+\section{Code for Partner's Scene.py}
+
+\noindent \lstinputlisting{../partner/Scene.py}
+
+\newpage
+
+\end {document}
